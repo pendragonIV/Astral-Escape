@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,8 +18,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //public SceneChanger sceneChanger;
-    //public GameScene gameScene;
+    public SceneChanger sceneChanger;
+    public GameScene gameScene;
 
     #region Game status
     private Level currentLevelData;
@@ -31,7 +32,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         currentLevelData = LevelManager.instance.levelData.GetLevelAt(LevelManager.instance.currentLevelIndex);
-
+        GameObject map = Instantiate(currentLevelData.map);
+        GridCellManager.instance.SetTileMap(map.transform.GetChild(1).GetChild(0).GetComponent<Tilemap>()); 
+        PuzzleManager.instance.SetContainer(map.transform.GetChild(0));
         Time.timeScale = 1;
     }
 
@@ -41,27 +44,33 @@ public class GameManager : MonoBehaviour
         {
             if (LevelManager.instance.levelData.GetLevelAt(LevelManager.instance.currentLevelIndex + 1).isPlayable == false)
             {
-                LevelManager.instance.levelData.SetLevelData(LevelManager.instance.currentLevelIndex + 1, true, false, 0);
+                LevelManager.instance.levelData.SetLevelData(LevelManager.instance.currentLevelIndex + 1, true, false);
             }
         }
 
         isGameWin = true;
-
-        //gameScene.ShowWinPanel();
-        Time.timeScale = 0;
+        StartCoroutine(WaitToWin());
         LevelManager.instance.levelData.SaveDataJSON();
     }
 
-    private void SetAchivement()
+    private IEnumerator WaitToWin()
     {
-        
+        yield return new WaitForSeconds(.5f);
+        Debug.Log("Win");
+        gameScene.ShowWinPanel();
     }
 
     public void Lose()
     {
         isGameLose = true;
-        //gameScene.ShowLosePanel();
+        StartCoroutine(WaitToLose());
         Time.timeScale = 0;
+    }
+
+    private IEnumerator WaitToLose()
+    {
+        yield return new WaitForSeconds(.5f);
+        gameScene.ShowLosePanel();
     }
 
     public bool IsGameWin()

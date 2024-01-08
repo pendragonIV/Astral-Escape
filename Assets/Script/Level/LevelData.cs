@@ -33,17 +33,16 @@ public class LevelData : ScriptableObject
         return levels;
     }
 
-    public void SetLevelData(int levelIndex, bool isPlayable, bool isCompleted, int achivement)
+    public void SetLevelData(int levelIndex, bool isPlayable, bool isCompleted)
     {
         levels[levelIndex].isPlayable = isPlayable;
         levels[levelIndex].isCompleted = isCompleted;
-        levels[levelIndex].achivement = achivement;
     }
 
     #region Save and Load
     public void SaveDataJSON()
     {
-        string content = JsonUtility.ToJson(this, true);
+        string content = JsonHelper.ToJson(levels.ToArray(), true);
         WriteFile(content);
     }
 
@@ -52,12 +51,11 @@ public class LevelData : ScriptableObject
         string content = ReadFile();
         if (content != null)
         {
-            //List<Level> levelsData = new List<Level>(JsonHelper.FromJson<Level>(content).ToList());
-            //for (int i = 0; i < levelsData.Count; i++)
-            //{
-            //    levels[i].SetLevel(levelsData[i]);
-            //}
-            JsonUtility.FromJsonOverwrite(content, this);
+            List<Level> levelsData = new List<Level>(JsonHelper.FromJson<Level>(content).ToList());
+            for (int i = 0; i < levelsData.Count; i++)
+            {
+                levels[i].SetLevel(levelsData[i]);
+            }
         }
     }
 
@@ -94,17 +92,13 @@ public class LevelData : ScriptableObject
 public class Level
 {
     public GameObject map;
-    public Vector2 playerSpawnPosition;
     public float timeLimit;
-    public int achivement;
     public bool isCompleted;
     public bool isPlayable;
 
     public void SetLevel(Level levelData)
     {
-        this.playerSpawnPosition = levelData.playerSpawnPosition;
         this.timeLimit = levelData.timeLimit;
-        this.achivement = levelData.achivement;
         this.isCompleted = levelData.isCompleted;
         this.isPlayable = levelData.isPlayable;
     }

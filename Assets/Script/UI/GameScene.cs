@@ -10,13 +10,20 @@ public class GameScene : MonoBehaviour
     [SerializeField]
     private Transform winPanel;
     [SerializeField]
+    private Transform losePanel;
+    [SerializeField]
     private Button replayButton;
     [SerializeField]
     private Button homeButton;
-
+    [SerializeField]
+    private Text levelIndex;
+    [SerializeField]
+    private Transform character;
 
     private void Start()
     {
+        //levelIndex.text = "Level " + (LevelManager.instance.currentLevelIndex + 1);
+        character.DORotate(new Vector3(0, 0, 7.5f), 2f).SetLoops(-1, LoopType.Yoyo).SetUpdate(true);
     }
 
     public void ShowWinPanel()
@@ -24,6 +31,15 @@ public class GameScene : MonoBehaviour
         overlayPanel.gameObject.SetActive(true);
         winPanel.gameObject.SetActive(true);
         FadeIn(overlayPanel.GetComponent<CanvasGroup>(), winPanel.GetComponent<RectTransform>());
+        homeButton.interactable = false;
+        replayButton.interactable = false;
+    }
+
+    public void ShowLosePanel()
+    {
+        overlayPanel.gameObject.SetActive(true);
+        losePanel.gameObject.SetActive(true);
+        FadeIn(overlayPanel.GetComponent<CanvasGroup>(), losePanel.GetComponent<RectTransform>());
         homeButton.interactable = false;
         replayButton.interactable = false;
     }

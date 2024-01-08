@@ -27,22 +27,28 @@ public class PuzzleManager : MonoBehaviour
     private void Start()
     {
         triggeredPuzzle = new List<GameObject>();
+    }
+
+    public void SetContainer(Transform container)
+    {
+        puzzleContainer = container;
         GetTotalTrigger();
     }
 
     private void GetTotalTrigger()
     {
-        foreach(Transform child in puzzleContainer)
+        foreach (Transform child in puzzleContainer)
         {
             totalTrigger += child.childCount;
         }
     }
 
+
     public void CheckPuzzle()
     {
         if(triggeredPuzzle.Count == totalTrigger)
         {
-            Debug.Log("Puzzle solved");
+            GameManager.instance.Win();
         }
     }
 

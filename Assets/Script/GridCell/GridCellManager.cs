@@ -21,8 +21,6 @@ public class GridCellManager : MonoBehaviour
         {
             instance = this;
         }
-
-        GetTiles();
     }
 
     public void SetTileMap(Tilemap tilemap)

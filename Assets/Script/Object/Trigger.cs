@@ -12,4 +12,13 @@ public class Trigger : MonoBehaviour
             PuzzleManager.instance.AddTriggered(collision.gameObject);
         }
     }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Trigger"))
+        {
+            PuzzleManager.instance.RemoveTriggered(this.gameObject);
+            PuzzleManager.instance.RemoveTriggered(collision.gameObject);
+        }
+    }
 }

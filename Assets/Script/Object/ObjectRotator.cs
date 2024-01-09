@@ -13,7 +13,7 @@ public class ObjectRotator : MonoBehaviour
 
     private void Update()
     {
-        if(!isClickable)
+        if(!isClickable || GameManager.instance.IsGameLose() || GameManager.instance.IsGameWin())
         {
             return;
         }

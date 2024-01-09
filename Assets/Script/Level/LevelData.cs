@@ -98,7 +98,6 @@ public class Level
 
     public void SetLevel(Level levelData)
     {
-        this.timeLimit = levelData.timeLimit;
         this.isCompleted = levelData.isCompleted;
         this.isPlayable = levelData.isPlayable;
     }

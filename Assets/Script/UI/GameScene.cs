@@ -19,11 +19,18 @@ public class GameScene : MonoBehaviour
     private Text levelIndex;
     [SerializeField]
     private Transform character;
+    [SerializeField]
+    private Image timeBar;
 
     private void Start()
     {
-        //levelIndex.text = "Level " + (LevelManager.instance.currentLevelIndex + 1);
+        levelIndex.text = "Level " + (LevelManager.instance.currentLevelIndex + 1);
         character.DORotate(new Vector3(0, 0, 7.5f), 2f).SetLoops(-1, LoopType.Yoyo).SetUpdate(true);
+    }
+
+    public void SetTimeLeft(float timeLeft)
+    {
+        this.timeBar.fillAmount = timeLeft / LevelManager.instance.levelData.GetLevelAt(LevelManager.instance.currentLevelIndex).timeLimit;
     }
 
     public void ShowWinPanel()

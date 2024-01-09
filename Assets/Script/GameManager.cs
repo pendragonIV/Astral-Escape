@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     private bool isGameWin = false;
     private bool isGameLose = false;
     private bool isGamePause = false;
+    private float timeLeft;
 
     #endregion
 
@@ -35,7 +36,22 @@ public class GameManager : MonoBehaviour
         GameObject map = Instantiate(currentLevelData.map);
         GridCellManager.instance.SetTileMap(map.transform.GetChild(1).GetChild(0).GetComponent<Tilemap>()); 
         PuzzleManager.instance.SetContainer(map.transform.GetChild(0));
+        timeLeft = currentLevelData.timeLimit;
         Time.timeScale = 1;
+    }
+
+    private void Update()
+    {
+        if(isGameWin || isGameLose)
+        {
+            return;
+        }
+        timeLeft -= Time.deltaTime;
+        gameScene.SetTimeLeft(timeLeft);
+        if (timeLeft <= 0)
+        { 
+            Lose();
+        }
     }
 
     public void Win()
@@ -56,20 +72,14 @@ public class GameManager : MonoBehaviour
     private IEnumerator WaitToWin()
     {
         yield return new WaitForSeconds(.5f);
-        Debug.Log("Win");
         gameScene.ShowWinPanel();
     }
+
+
 
     public void Lose()
     {
         isGameLose = true;
-        StartCoroutine(WaitToLose());
-        Time.timeScale = 0;
-    }
-
-    private IEnumerator WaitToLose()
-    {
-        yield return new WaitForSeconds(.5f);
         gameScene.ShowLosePanel();
     }
 
